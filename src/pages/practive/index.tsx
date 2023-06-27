@@ -6,7 +6,7 @@ import { FastField, Form, Formik } from "formik";
 import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { TextField } from "../../components/common/Form/input-field";
+import { TextField } from "../../components/common/form/inputField";
 import { store } from "../../redux";
 
 const useStyles = makeStyles((theme) => {

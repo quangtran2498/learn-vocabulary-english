@@ -5,8 +5,8 @@ import { makeStyles, withStyles } from "@mui/styles";
 import { FastFieldProps } from "formik";
 //
 import { InputAdornment } from "@mui/material";
-import FormLabel from "./FormLabel";
 import { colors } from "../../../colors";
+import FormLabel from "./FormLabel";
 
 interface Props extends FastFieldProps {
   label?: string;
