@@ -1,0 +1,151 @@
+export const colors = {
+    white: "#FFFFFF",
+    blueMain: "rgba(20, 30, 210, 1)",
+    mainColor: "#E779A1",
+    textBlue: "#51BEF0",
+    textWhite: "#FFFFFF",
+    textBlue2: "#5BC5F2",
+    textBlack: "#101434",
+    blueSky: "#5BC5F2",
+    textNeural: "#9197A3",
+    textLightPink: "#EA84AB",
+    lightGray: "#F1F1F1",
+    lightBlueSky: "#EEF6FA",
+    grayRounded: "rgba(145, 151, 163, 1)",
+    success: "#34C759",
+    brandColorBlue: "#0033AB",
+    brandColorPink: "#C90067",
+    blue: "rgba(20, 30, 210, 1)",
+    red: "#D63120",
+    textRed: "#EF3A2D",
+    pink: "#DD0071",
+    pinkLight: "#EA84AB",
+    backgroundLightBlue: "#CFD2FC",
+    backgroundLightBlue2: "#DFF3FF",
+    backgroundLightBlue3: "#F0F6FA",
+    backgroundLightPurple: "#E7E8FD",
+    backgroundPurple: "#4952E3",
+    backgroundLightGreen: "#EDFCF3",
+  
+    tintBrandBlueLV1: "#0033AB",
+    blueShadeTint: "#0033AB",
+    pinkTintLevel: "#0033AB",
+    textGreen: "#1FC260",
+  
+    //status
+    systemRed: "#FF3B30",
+    systemOrange: "#FF9500",
+    systemYellow: "#FFCC00",
+    systemGreen: "#34C759",
+    systemTeal: "#5AC8FA",
+    systemBlue: "#007AFF",
+    systemIndigo: "#5856D6",
+    systemPurple: "#AF52DE",
+    systemPink: "#FF2D55",
+  
+    //gray
+    systemGray: "#FCE6EF",
+    systemGray2: "#AEAEB2",
+    systemGray3: "#C7C7CC",
+    systemGray4: "#D1D1D6",
+    systemGray5: "#E5E5EA",
+    systemGray6: "#F2F2F7",
+  
+    //Pastel Colors
+    pastelPink: "#FCE6EF",
+    pastelRed: "#FAE6E4",
+    pastelSkyBlue: "#EBF9FF",
+    pastelBlue: "#F0F1FF",
+  
+    //Stroke/ Outline/ Background Colors
+    backgroundWhite: "#FFFFFF",
+    backgroundGray: "#F7F7F9",
+    lightGray2: "#F9F9FB",
+    purpleBg: "#D9DBF8",
+    borderGray: "#F5F5F5",
+  
+    //Typography Colors (Neutral)
+    black: "#101434",
+    neutral: "#36384D",
+    // gray: "#4C5466",
+    light: "#9197A3",
+    disabled: "#AEB2BD",
+    purpleBlue: "#4C51F5",
+    //background
+    background: {
+      main: "#FFFFFF",
+      blueMain: "rgba(20, 30, 210, 1)",
+      white: "#FFFFFF",
+      disableBtn: "#CFD2FC",
+      page: "#FAFBFE",
+      backgroundPurple: "#4952E3",
+      blueSky: "#5BC5F2",
+      pinkLight: "#EA84AB",
+      blue: '#141ED2',
+      backgroundLightPurple: "#E7E8FD",
+      purple: '#4254E0',
+      gray: '#F8F8F8',
+      gray2: '#EAEAEA'
+    },
+    input: {
+      border: {
+        main: "#D8D8DC",
+      },
+      background: {
+        main: "#fff",
+        disable: "#EBEBF0",
+      },
+    },
+    text: {
+      title: "#000000",
+      blueMain: "rgba(20, 30, 210, 1)",
+      desc: "#666666",
+      opacity: "#BABABA",
+      pink: "#E8127E",
+      pink2: "#FB4390",
+      pink3: "#DC0071",
+      pink4: "#D2006A",
+      blue: "#141ED2",
+      blue2: "#3C55DE",
+      purple: "#4952E3",
+      white: '#FFFFFF',
+      gray: '#B9B9B9',
+      purple2: '#4254E0',
+    },
+    button: {
+      red: "rgba(255, 59, 48, 1)",
+      pinkError: "#FFE7E6",
+    },
+    blues: {
+      dark: "",
+      light: "#5EC4EF",
+      opacity:"#E7E8FD",
+      main:"rgba(20, 30, 210, 1)",
+      mainSub:"#4254E0"
+    },
+    pinks: {
+      sliderFee: "#D2006A",
+      titleProduct: "#DB1372",
+      textIntro: "#DB1372",
+    },
+    gray: {
+      slider: "#EAEDF3",
+      dark: "#F5F5F5",
+      dark2: "#E0E0E0",
+      dark3: "#ccc",
+      dark4: "#EEEEEE",
+      dark5: "#D8D8DC",
+    },
+    bgGradient: {
+      blueMain: "linear-gradient(82.04deg, #3D59A8 -177.58%, #5EC4EF 124.5%)",
+      logoBee:
+        "linear-gradient(323.7deg, #D43327 -102.15%, #DD5967 -102.13%, #E681A9 92.94%)",
+    },
+    border: {
+      blue: '#3C55DE',
+      main: "rgba(0, 0, 0, 0.1)",
+      shadow: "rgba(0, 0, 0, 0.15)",
+      shadow2: "rgba(0, 0, 0, 0.08)",
+    },
+  };
+  
