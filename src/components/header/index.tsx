@@ -1,4 +1,3 @@
-import React from "react";
 import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
 import { path } from "../../contant/path";
@@ -6,6 +5,9 @@ const useStyles = makeStyles((theme) => {
   return {
     header: {
       background: "#000000",
+      position:"fixed",
+      top:0,
+      width:"100%"
     },
     root: {
       ...theme.custom?.flexBox.spaceBetweenCenter,
@@ -39,13 +41,13 @@ const Header = () => {
   }
   
   return (
-    <div className={classes.header}>
+    <div id="header" className={classes.header}>
       <div className={classes.root}>
-        <div className={classes.navLeft}>Daily english</div>
+        <div className={classes.navLeft} onClick={() => onNavigate(path.home)}>Daily english</div>
         <div className={classes.navRight}>
           <div className={classes.navItem} onClick={() => onNavigate(path.home)}>home</div>
-          <div className={classes.navItem} onClick={() => onNavigate(path.inputVocabulary)}>tu vung tu chon</div>
-          <div className={classes.navItem} onClick={() => onNavigate(path.practive)}>tu vung theo chu de</div>
+          <div className={classes.navItem} onClick={() => onNavigate(path.vocabularyCustom)}>tu vung tu chon</div>
+          <div className={classes.navItem}>tu vung theo chu de</div>
           <div className={classes.navItem}>tu vung da hoc</div>
         </div>
       </div>

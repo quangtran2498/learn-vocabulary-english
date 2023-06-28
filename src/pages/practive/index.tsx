@@ -1,16 +1,23 @@
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { makeStyles } from "@mui/styles";
 import { FastField, Form, Formik } from "formik";
 import React from "react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { TextField } from "../../components/common/form/inputField";
 import { store } from "../../redux";
 
 const useStyles = makeStyles((theme) => {
   return {
+    root:{
+       display:"flex",
+       justifyContent:"flex-end"
+    },
+    rootContent:{
+      width:"75%"
+    },
     test: {
       color: theme.custom?.text.pinkSubTitle,
     },
@@ -20,10 +27,12 @@ const useStyles = makeStyles((theme) => {
     textTitle: {
       marginRight: "30px",
     },
+    rootBtn:{
+      ...theme.custom?.flexBox.centerCenter
+    },
     btn: {
       padding: "10px 50px",
       background: "red",
-      margin: "0 auto",
       marginTop: "30px",
       width: "fit-content",
       borderRadius: "16px",
@@ -64,86 +73,126 @@ const PractiveInputVocabularys = () => {
   };
 
   return (
-    <Formik initialValues={genInitialValue().answers} onSubmit={() => {console.log("");
-    }}>
-      {(formik) => {
+    <div className={classes.root}>
+      <div className={classes.rootContent}>
+        <Formik
+          initialValues={genInitialValue().answers}
+          onSubmit={() => {
+            console.log("");
+          }}
+        >
+          {(formik) => {
+            const hanldeChangeDirection = () => {
+              const newArrVocabulary = [...dataVocabularys].sort(
+                () => Math.random() - 0.5
+              );
 
-        const hanldeChangeDirection = () => {
-          const newArrVocabulary = [...dataVocabularys].sort(
-            () => Math.random() - 0.5
-          );
+              setDataVocabularys(newArrVocabulary);
+              changeDirection === "vn"
+                ? setChangeDirection("en")
+                : setChangeDirection("vn");
+              formik.handleReset();
+            };
 
-          setDataVocabularys(newArrVocabulary);
-          changeDirection === "vn" ? setChangeDirection("en") : setChangeDirection("vn");
-          formik.handleReset();
-        };
+            const checkValue = (index: number) => {
+              if (changeDirection === "vn") {
+                return dataVocabularys[index]?.vocabulary ===
+                  formik.values[index]?.mean
+                  ? true
+                  : false;
+              } else {
+                return dataVocabularys[index]?.mean ===
+                  formik.values[index]?.mean
+                  ? true
+                  : false;
+              }
+            };
 
-        const checkValue = (index: number) => {
-          if (changeDirection === "vn") {
-            return dataVocabularys[index]?.vocabulary === formik.values[index]?.mean ? true : false;
-          } else {
-            return dataVocabularys[index]?.mean === formik.values[index]?.mean ? true : false;
-          }
-        };
-
-        return (
-          <Form>
-            <div className="" style={{ padding: "20px" }}>
-              <div>
-                {Array(dataVocabularys.length)
-                  .fill(0)
-                  .map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className=""
-                        style={{ display: "flex", alignItems: "center" }}
-                      >
-                        <div className="" style={{ marginRight: "30px" }}>
-                          {changeDirection === "vn" ? dataVocabularys[index]?.mean : dataVocabularys[index]?.vocabulary}
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <FastField
-                            component={TextField}
-                            placeholder=""
-                            label=""
-                            {...formik.getFieldProps(`[${index}].mean`)}
-                          />
-                          <div className="" style={{ marginLeft: "20px" }}>
-                            {checkValue(index) ? (
-                              <CheckIcon sx={{ color: "green" }} />
-                            ) : (
-                              <CloseIcon sx={{ color: "red" }} />
-                            )}
+            return (
+              <Form>
+                <div className="" style={{ padding: "20px" }}>
+                  <div>
+                    {Array(dataVocabularys.length)
+                      .fill(0)
+                      .map((item, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className=""
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <div className="" style={{ marginRight: "30px" }}>
+                              {changeDirection === "vn"
+                                ? dataVocabularys[index]?.mean
+                                : dataVocabularys[index]?.vocabulary}
+                            </div>
                             <div
-                              className=""
                               style={{ display: "flex", alignItems: "center" }}
                             >
-                              <div className="" style={{ marginRight: "5px" }} onClick={() => hanldeShowAnswer(index)}>
-                                
-                              {showAnswer===index ? <VisibilityOffIcon/> : <VisibilityIcon/>}
-                                
-                              </div>
-                              {showAnswer===index && (
-                                <div className="">
-                                  {changeDirection === "vn" ? dataVocabularys[index].vocabulary : dataVocabularys[index].mean}
+                              <FastField
+                                component={TextField}
+                                placeholder=""
+                                label=""
+                                {...formik.getFieldProps(`[${index}].mean`)}
+                              />
+                              <div className="" style={{ marginLeft: "20px" }}>
+                                {checkValue(index) ? (
+                                  <CheckIcon sx={{ color: "green" }} />
+                                ) : (
+                                  <CloseIcon sx={{ color: "red" }} />
+                                )}
+                                <div
+                                  className=""
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <div
+                                    className=""
+                                    style={{ marginRight: "5px" }}
+                                    onClick={() => hanldeShowAnswer(index)}
+                                  >
+                                    {showAnswer === index ? (
+                                      <VisibilityOffIcon />
+                                    ) : (
+                                      <VisibilityIcon />
+                                    )}
+                                  </div>
+                                  {showAnswer === index && (
+                                    <div className="">
+                                      {changeDirection === "vn"
+                                        ? dataVocabularys[index].vocabulary
+                                        : dataVocabularys[index].mean}
+                                    </div>
+                                  )}
                                 </div>
-                              )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-            <div className={classes.btn} onClick={hanldeChangeDirection}>
-              doi chieu
-            </div>
-          </Form>
-        );
-      }}
-    </Formik>
+                        );
+                      })}
+                  </div>
+                </div>
+
+                <div className={classes.rootBtn}>
+                  <div
+                    className={classes.btn}
+                    style={{ marginRight: "10px" }}
+                    onClick={hanldeChangeDirection}
+                  >
+                    Đổi chiều
+                  </div>
+                  <div className={classes.btn} onClick={hanldeChangeDirection}>
+                    Hoàn thành
+                  </div>
+                </div>
+              </Form>
+            );
+          }}
+        </Formik>
+      </div>
+    </div>
   );
 };
 

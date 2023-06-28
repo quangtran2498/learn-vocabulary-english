@@ -6,7 +6,7 @@ import { FastFieldProps } from "formik";
 //
 import { InputAdornment } from "@mui/material";
 import { colors } from "../../../colors";
-import FormLabel from "./FormLabel";
+import FormLabel from "./formLabel";
 
 interface Props extends FastFieldProps {
   label?: string;

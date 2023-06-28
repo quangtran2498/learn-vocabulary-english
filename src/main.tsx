@@ -8,6 +8,9 @@ import Home from "./pages/home/index.tsx";
 import "./index.css"
 import InputVocabulary from "./pages/inputVocabularys/index.tsx";
 import PractiveInputVocabularys from "./pages/practive/index.tsx";
+import VocabularyCustom from "./pages/vocabularyCustom/index.tsx";
+import Login from "./pages/login/index.tsx";
+import SignUp from "./pages/signUp/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -20,16 +23,30 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "sign-up",
+        element: <SignUp />,
+      },
+      {
         path: "contact",
         element: <Contact />,
       },
       {
-        path: "input-vocabulary",
-        element: <InputVocabulary />,
-      },
-      {
-        path: "practive",
-        element: <PractiveInputVocabularys />,
+        path: "vocabulary-custom",
+        element: <VocabularyCustom />,
+        children: [
+          {
+            path: "input-vocabulary",
+            element: <InputVocabulary />,
+          },
+          {
+            path: "practive",
+            element: <PractiveInputVocabularys />,
+          },
+        ]
       },
     ],
   },
