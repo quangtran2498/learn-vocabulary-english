@@ -68,6 +68,9 @@ declare module "@mui/material/styles" {
       boxShadow: {
         main: string;
       };
+      varRoot:{
+        navLeft:"20%"
+      }
     };
   }
   interface Theme extends CustomTheme {}
@@ -142,6 +145,9 @@ export const theme = createTheme({
     },
     boxShadow: {
       main: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+    },
+    varRoot:{
+      navLeft:"20%"
     },
   },
   palette: {},

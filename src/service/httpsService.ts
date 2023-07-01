@@ -29,6 +29,20 @@ class Services {
     );
   }
 
+  attachTokenToHeader(token: string) {
+    this.axios.interceptors.request.use(
+      function (config) {
+        if (config.headers) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+      },
+      function (error) {
+        return Promise.reject(error);
+      }
+    );
+  }
+
   get<T = any, R = T>(url: string, config?: AxiosRequestConfig): Promise<R> {
     return this.axios.get<T, R>(url, { ...config });
   }

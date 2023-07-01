@@ -129,8 +129,6 @@ export const TextField = (props: Props) => {
         name={name}
         type={type}
         onKeyDown={onKeyDown}
-        //   value={value}
-        //   size={size}
         fullWidth={fullWidth}
         className={`${props.className}`}
         onChange={handleChange}
@@ -141,8 +139,6 @@ export const TextField = (props: Props) => {
         }}
         onBlur={handleBlur}
         placeholder={placeholder}
-        // onTouchStart={() => setFieldTouched(name)}
-
         {...rest}
         error={touched[name] && Boolean(errors[name])}
         helperText={touched[name] && errors[name] && (<>{errors[name]}</>)}

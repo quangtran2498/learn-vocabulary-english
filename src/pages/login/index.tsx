@@ -4,18 +4,27 @@ import { useNavigate } from "react-router-dom";
 import { TextField } from "../../components/common/form/inputField";
 import { path } from "../../contant/path";
 import { loginValidate } from "../../utils";
+import { LoginReqI } from "../../types/auth";
+import { LoginApi } from "../../service/login";
+import { store } from "../../redux";
+import { setToken } from "../../redux/slice/auth";
+import httpsService from "../../service/httpsService";
+
 const useStyles = makeStyles((theme) => {
   return {
     root: {
-      ...theme.custom?.flexBox.centerCenter,
-      height: "calc(100vh - 44px)",
+      height: "100vh",
       background:
         "linear-gradient(90deg, rgba(0,36,34,0.9921218487394958) 0%, rgba(9,107,121,1) 34%, rgba(0,212,255,1) 100%)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
     content: {
       width: "500px",
       background: "#fff",
       borderRadius: "16px",
+      margin: "0 auto",
     },
     title: {
       textAlign: "center",
@@ -26,31 +35,32 @@ const useStyles = makeStyles((theme) => {
     rootForm: {
       padding: "24px",
     },
-    btn:{
-      background:"#0284c7",
-      width:"80%",
-      padding:"16px",
-      borderRadius:"24px",
-      border:"none",
-      color:"#fff",
-      fontWeight:600,
-      fontSize:"18px"    
+    btn: {
+      background: "#0284c7",
+      width: "80%",
+      padding: "16px",
+      borderRadius: "24px",
+      border: "none",
+      color: "#fff",
+      fontWeight: 600,
+      fontSize: "18px",
     },
-    rootBtn:{
-      ...theme.custom?.flexBox.horizontalCenter,
-      marginBottom:"24px"
+    rootBtn: {
+      display: "flex",
+      justifyContent: "center",
+      marginBottom: "24px",
     },
-    textSignIn:{
-       color:"#333",
-       textAlign:"center"
+    textSignIn: {
+      color: "#333",
+      textAlign: "center",
     },
-    textForgetPass:{
-      color:"#666666"
+    textForgetPass: {
+      color: "#666666",
     },
-    textLink:{
-      color:"#0284c7",
-      cursor:"pointer"
-    }
+    textLink: {
+      color: "#0284c7",
+      cursor: "pointer",
+    },
   };
 });
 
@@ -66,8 +76,24 @@ const Login = () => {
   const navigateSignUp = () => {
     navigate(path.signUp)
   }
+
+  const callLogin = async (body:LoginReqI) => {
+
+    try {
+      const res = await LoginApi(body)
+      
+      store.dispatch(setToken(`${res.data.access_token}`))
+      localStorage.setItem("token", res.data.access_token)
+      httpsService.attachTokenToHeader(res.data.access_token)
+      navigate(path.home)
+
+    }catch {
+
+    }
+  }
+  
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{}}>
       <div className={classes.content}>
         <h1 className={classes.title}>Đăng nhập</h1>
         <div className={classes.rootForm}>
@@ -77,6 +103,12 @@ const Login = () => {
             validationSchema={loginValidate}
           >
             {(formik) => {
+
+              const body = {
+                name:formik.values.userName,
+                password:formik.values.password,
+              }
+              
               return (
                 <Form>
                   <div className="">
@@ -98,7 +130,7 @@ const Login = () => {
                     </div>
                     <p className={classes.textForgetPass}>Quên mật khẩu ?</p>
                     <div className={classes.rootBtn}>
-                      <button className={classes.btn}>Đăng nhập</button>
+                      <button className={classes.btn} onClick={() => callLogin(body)}>Đăng nhập</button>
                     </div>
                     <p className={classes.textSignIn}>Bạn chưa có tài khoản <span className={classes.textLink} onClick={navigateSignUp} >Đăng kí</span></p>
                   </div>

@@ -4,8 +4,6 @@ import InputVocabuary from "../../components/guide/children/inputVocabuary";
 import { makeStyles } from "@mui/styles";
 import { Outlet } from "react-router-dom";
 import { path } from "../../contant/path";
-import useReRenderPage from "../../hook/reRender";
-
  export interface PropsOutLetI {
   highLightGuide:number,
   getHighLightGuide:(index:number) => void,
@@ -29,9 +27,7 @@ const useStyles = makeStyles((theme) => {
 const VocabularyCustom = () => {
   const [highLightGuide, setHighLightGuide] = React.useState(0)
   const [pathUrl, setPathUrl] = React.useState<string>(window.location.pathname)
-  
-  console.log(pathUrl,"pathUrl");
-  
+    
   const classes = useStyles();
   
   const getHighLightGuide = (index:number) => {
@@ -41,11 +37,7 @@ const VocabularyCustom = () => {
   const getPathUrl = (path:string) => {
     setPathUrl(path)
   }
-  const [reRender] = useReRenderPage()
 
-  React.useEffect(() => {
-
-  },[reRender])
 
   return (
     <div >

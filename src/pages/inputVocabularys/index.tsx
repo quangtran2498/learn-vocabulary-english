@@ -7,6 +7,7 @@ import { path } from "../../contant/path";
 import { store } from "../../redux";
 import { setDataVocabuleryCustom } from "../../redux/slice/vocabulery";
 import { PropsOutLetI } from "../vocabularyCustom";
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -141,6 +142,11 @@ const InputVocabulary = () => {
 
   const propsOutlet:PropsOutLetI = useOutletContext()
   const {highLightGuide,getPathUrl} = propsOutlet   
+  
+  useEffect(() => {
+     const pathCurrent = window.location.pathname
+     getPathUrl(pathCurrent)     
+  },[])
   
   return (
     <>

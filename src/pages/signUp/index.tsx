@@ -3,19 +3,18 @@ import { FastField, Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "../../components/common/form/inputField";
 import { path } from "../../contant/path";
-import { signUpValidate } from "../../utils";
 import { CreateNewUser } from "../../service/create-user";
 import { CreateNewUserReqI } from "../../types/users";
-import { setToken } from "../../redux/slice/auth";
-import { store } from "../../redux";
+import { signUpValidate } from "../../utils";
 
 const useStyles = makeStyles((theme) => {
   return {
     root: {
       ...theme.custom?.flexBox.centerCenter,
-      height: "calc(100vh - 44px)",
+      height: "100vh",
       background:
         "linear-gradient(90deg, rgba(0,36,34,0.9921218487394958) 0%, rgba(9,107,121,1) 34%, rgba(0,212,255,1) 100%)",
+        backgroundColor:"red"
     },
     content: {
       width: "500px",
@@ -77,9 +76,7 @@ const SignUp = () => {
 
     try {
       const res = await CreateNewUser(body)
-
-      store.dispatch(setToken(`${res.data.userId}`))
-      navigate(path.home)
+      navigate(path.login)
 
     }catch {
 

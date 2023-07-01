@@ -1,77 +1,7 @@
 export const colors = {
     white: "#FFFFFF",
     blueMain: "rgba(20, 30, 210, 1)",
-    mainColor: "#E779A1",
-    textBlue: "#51BEF0",
-    textWhite: "#FFFFFF",
-    textBlue2: "#5BC5F2",
-    textBlack: "#101434",
-    blueSky: "#5BC5F2",
-    textNeural: "#9197A3",
-    textLightPink: "#EA84AB",
-    lightGray: "#F1F1F1",
-    lightBlueSky: "#EEF6FA",
-    grayRounded: "rgba(145, 151, 163, 1)",
-    success: "#34C759",
-    brandColorBlue: "#0033AB",
-    brandColorPink: "#C90067",
-    blue: "rgba(20, 30, 210, 1)",
-    red: "#D63120",
-    textRed: "#EF3A2D",
-    pink: "#DD0071",
-    pinkLight: "#EA84AB",
-    backgroundLightBlue: "#CFD2FC",
-    backgroundLightBlue2: "#DFF3FF",
-    backgroundLightBlue3: "#F0F6FA",
-    backgroundLightPurple: "#E7E8FD",
-    backgroundPurple: "#4952E3",
-    backgroundLightGreen: "#EDFCF3",
-  
-    tintBrandBlueLV1: "#0033AB",
-    blueShadeTint: "#0033AB",
-    pinkTintLevel: "#0033AB",
-    textGreen: "#1FC260",
-  
-    //status
-    systemRed: "#FF3B30",
-    systemOrange: "#FF9500",
-    systemYellow: "#FFCC00",
-    systemGreen: "#34C759",
-    systemTeal: "#5AC8FA",
-    systemBlue: "#007AFF",
-    systemIndigo: "#5856D6",
-    systemPurple: "#AF52DE",
-    systemPink: "#FF2D55",
-  
-    //gray
-    systemGray: "#FCE6EF",
-    systemGray2: "#AEAEB2",
-    systemGray3: "#C7C7CC",
-    systemGray4: "#D1D1D6",
-    systemGray5: "#E5E5EA",
-    systemGray6: "#F2F2F7",
-  
-    //Pastel Colors
-    pastelPink: "#FCE6EF",
-    pastelRed: "#FAE6E4",
-    pastelSkyBlue: "#EBF9FF",
-    pastelBlue: "#F0F1FF",
-  
-    //Stroke/ Outline/ Background Colors
-    backgroundWhite: "#FFFFFF",
-    backgroundGray: "#F7F7F9",
-    lightGray2: "#F9F9FB",
-    purpleBg: "#D9DBF8",
-    borderGray: "#F5F5F5",
-  
-    //Typography Colors (Neutral)
-    black: "#101434",
-    neutral: "#36384D",
-    // gray: "#4C5466",
-    light: "#9197A3",
-    disabled: "#AEB2BD",
-    purpleBlue: "#4C51F5",
-    //background
+    greenMain:"#a3e635",
     background: {
       main: "#FFFFFF",
       blueMain: "rgba(20, 30, 210, 1)",

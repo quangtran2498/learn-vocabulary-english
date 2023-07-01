@@ -4,5 +4,9 @@ export const path = {
     signUp:"/sign-up",
     inputVocabulary:"/input-vocabulary",
     practive:"/vocabulary-custom/practive",
-    vocabularyCustom:"/vocabulary-custom/input-vocabulary"
+    vocabularyCustom:"/vocabulary-custom/input-vocabulary",
+    games:"/games",
+    gameImageVocabulary:"/games/image-vocabulary",
+    gameGun:"/games/gun",
+
 }
