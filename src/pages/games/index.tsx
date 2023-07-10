@@ -8,6 +8,7 @@ import { store } from "../../redux";
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import { colors } from "../../colors";
+import ClosePage from "../../components/closePage";
 
 export interface PropsOutLetI {
   highLightGuide: number;
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => {
       background: "#000000",
       padding: "24px 24px 0px 24px",
       width: "calc(20% - 48px)",
-      height: "calc(100vh - 44px)",
+      height: "100vh",
       color: "#fff",
       position: "fixed",
     },
@@ -132,7 +133,7 @@ const Games = () => {
 
   return (
     <div>
-      <div className={classes.navGuide} style={{top:heightHeader}}>
+      <div className={classes.navGuide}>
         <Guide>
           <GuideGames />
         </Guide>
@@ -147,7 +148,10 @@ const Games = () => {
            <div className={classes.childChangeItem}>Học ngẫu nhiên</div>
          </div>
       </div>
-      <div className={classes.rootContent} style={{height:`calc(100vh - ${heightHeader}px - 24px)`}}>
+      <div>
+        <ClosePage />
+      </div>
+      <div className={classes.rootContent} style={{height:`calc(100vh - 64px - 24px)`}}>
         <div className={classes.content}>
           <div className={classes.navGanes}>
             {data.map((game) => {

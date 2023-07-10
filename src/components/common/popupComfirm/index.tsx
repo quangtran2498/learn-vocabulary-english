@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => {
       color: theme.custom?.text.title,
       textAlign: "center",
       marginBottom: "16px",
+      fontWeight: 'bold',
     },
     textDesc: {
       textAlign: "center",
@@ -128,7 +129,7 @@ const PopupConfirm = (props: PopupConfirmProps) => {
           className={classes.TextTitle}
           style={styleTitle}
         >
-          {title}
+          {title || "Thông báo"}
         </div>
         <div className="">{content}</div>
         {descErrorDefault && (

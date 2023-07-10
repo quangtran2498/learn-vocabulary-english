@@ -1,13 +1,21 @@
+import moment from "moment";
+import { isEmpty } from "lodash";
+import { useEffect } from "react";
+import { store } from "../../redux";
+import jwt_decode from "jwt-decode";
+import { path } from "../../contant/path";
 import AddIcon from "@mui/icons-material/Add";
+import { PropsOutLetI } from "../vocabularyCustom";
+import { ItemLocalstorage } from "../../contant/enums";
 import { makeStyles } from "@mui/styles";
 import { FastField, FieldArray, Form, Formik } from "formik";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { TextField } from "../../components/common/form/inputField";
-import { path } from "../../contant/path";
-import { store } from "../../redux";
 import { setDataVocabuleryCustom } from "../../redux/slice/vocabulery";
-import { PropsOutLetI } from "../vocabularyCustom";
-import { useEffect } from "react";
+import { updateVocabularysApi } from "../../service/update-vocabularys";
+import { UpdateVocabularysReqI } from "../../types/updateVocabulary";
+import CloseIcon from '@mui/icons-material/Close';
+import ClosePage from "../../components/closePage";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -52,8 +60,10 @@ const useStyles = makeStyles((theme) => {
     },
     rootAdd: {
       display: "flex",
-      justifyContent: "flex-end",
+      width:"10%",
+      justifyContent: "center",
       marginBottom: "24px",
+      marginTop:"30px"
     },
     contentAdd: {
       width: "48px",
@@ -63,7 +73,8 @@ const useStyles = makeStyles((theme) => {
       justifyContent: "center",
       borderRadius: "50%",
       border: "1px solid",
-      position:"relative"
+      position:"relative",
+      cursor: "pointer"
     },
     removeItem: {
       width: "30px",
@@ -125,11 +136,15 @@ const InputVocabulary = () => {
   const vocabuleryNumber = store.getState().learnVocabulery.vocabuleryNumber || 5;
   const navigate = useNavigate()
   const classes = useStyles();
+  const tokenLocal = localStorage.getItem("token") || ""  
+  const  decodedHeader:any = jwt_decode(tokenLocal);
   
   const genInitialValue = () => {
     const inputVocabulary = {
+      userId:decodedHeader.sub,
       vocabulary: "",
       mean: "",
+      date:moment().format("YYYY-MM-DD")
     };
 
     const answers = [];
@@ -148,146 +163,227 @@ const InputVocabulary = () => {
      getPathUrl(pathCurrent)     
   },[])
   
+  const callUpdateVocabularys = async(body:UpdateVocabularysReqI[]) => {
+    try {
+       const res = await updateVocabularysApi(body)
+    }catch {
+
+    }
+  }
+
   return (
     <>
-    <div className={classes.rootPage}>
-      <div className={classes.navContent}>
-        <Formik
-          initialValues={genInitialValue()}
-          onSubmit={() => {
-            console.log("");
-          }}
-        >
-          {(formik) => {
+      <div className={classes.rootPage}>
+        <div className={classes.navContent}>
+          <Formik
+            initialValues={genInitialValue()}
+            onSubmit={() => {
+              console.log("");
+            }}
+          >
+            {(formik) => {
+              // console.log(formik.values);
 
-            const checkValueAllVocabulary = formik.values.answers.every((item) => item.vocabulary && item.mean)
+              const checkValueAllVocabulary = formik.values.answers.every(
+                (item) => item.vocabulary && item.mean
+              );
 
-            const nextPractive = () => {
-              if(checkValueAllVocabulary) {
-                getPathUrl(path.practive)
-                navigate(path.practive);
-                store.dispatch(setDataVocabuleryCustom(formik.values?.answers));
-              } else {
-                 alert("Bạn chưa điền hết thông tin")
-              }
-            };
-  
-            return ( 
-              <Form>
-                <FieldArray
-                  name="answers"
-                  render={({ push, remove }) => (
-                    <div className="">
-                      <div
-                        className={classes.rootAdd}
-                        onClick={() => push({ vocabulary: "", mean: "" })}
-                      >
-                        <div className={`${classes.contentAdd}`}>
-                          <AddIcon sx={{ fontSize: "30px" }} />
-                          <div className={ highLightGuide === indexHighLightGuide.addInput ? "high-light-guide" : "" } ></div>
-                        </div>
-                      </div>
-                      <div className={classes.rootHeader}>
-                        <div
-                          className={`${classes.widthIndex} ${classes.alignCnter}`}
-                        >
-                          <span className={classes.relative}>
-                            Stt
-                            <div className={ highLightGuide === indexHighLightGuide.index ? "high-light-guide" : "" } ></div>
-                          </span>
-                        </div>
-                        <div className={`${classes.widthInput}`}>
-                          <span className={classes.relative}>
-                            Từ vựng
-                            <div className={ highLightGuide === indexHighLightGuide.vocabulary ? "high-light-guide" : "" } ></div>
-                          </span>
-                        </div>
-                        <div className={`${classes.widthInput}`}>
-                          <span className={classes.relative}>
-                            Nghĩa
-                            <div className={ highLightGuide === indexHighLightGuide.mean ? "high-light-guide" : "" } ></div>
-                          </span>
-                        </div>
-                        <div className={`${classes.widthRemove}`}>
-                          <span className={classes.relative}>
-                            Xóa
-                            <div className={ highLightGuide === indexHighLightGuide.deleteInput ? "high-light-guide" : "" } ></div>
-                          </span>
-                        </div>
-                      </div>
-                      <div className={classes.contianerCoupleInput}>
-                        {Array(formik.values.answers.length)
-                          .fill(0)
-                          .map((item, index) => {
-                            return (
+              const nextPractive = (body: UpdateVocabularysReqI[]) => {
+                if (checkValueAllVocabulary) {
+                  getPathUrl(path.practive);
+                  navigate(path.practive);
+                  store.dispatch(
+                    setDataVocabuleryCustom(formik.values?.answers)
+                  );
+                  const getVocabularysLocal = localStorage.getItem(
+                    ItemLocalstorage.vocabularys
+                  );
+                  const convertstringToArr = JSON.parse(
+                    getVocabularysLocal || ""
+                  );
+
+                  const saveDataToLocal = () => {
+                    if (!isEmpty(convertstringToArr)) {
+                      return JSON.stringify([...body, ...convertstringToArr]);
+                    } else {
+                      return JSON.stringify(body);
+                    }
+                  };
+                  console.log(saveDataToLocal());
+
+                  localStorage.setItem(
+                    ItemLocalstorage.vocabularys,
+                    saveDataToLocal()
+                  );
+                  // callUpdateVocabularys(body)
+                } else {
+                  alert("Bạn chưa điền hết thông tin");
+                }
+              };
+
+              return (
+                <Form>
+                  <FieldArray
+                    name="answers"
+                    render={({ push, remove }) => (
+                      <div className="">
+                        <div className={classes.rootHeader}>
+                          <div
+                            className={`${classes.widthIndex} ${classes.alignCnter}`}
+                          >
+                            <span className={classes.relative}>
+                              Stt
                               <div
-                                key={index}
-                                className={classes.rootItemVocabulary}
-                              >
+                                className={
+                                  highLightGuide === indexHighLightGuide.index
+                                    ? "high-light-guide"
+                                    : ""
+                                }
+                              ></div>
+                            </span>
+                          </div>
+                          <div className={`${classes.widthInput}`}>
+                            <span className={classes.relative}>
+                              Từ vựng
+                              <div
+                                className={
+                                  highLightGuide ===
+                                  indexHighLightGuide.vocabulary
+                                    ? "high-light-guide"
+                                    : ""
+                                }
+                              ></div>
+                            </span>
+                          </div>
+                          <div className={`${classes.widthInput}`}>
+                            <span className={classes.relative}>
+                              Nghĩa
+                              <div
+                                className={
+                                  highLightGuide === indexHighLightGuide.mean
+                                    ? "high-light-guide"
+                                    : ""
+                                }
+                              ></div>
+                            </span>
+                          </div>
+                          <div className={`${classes.widthRemove}`}>
+                            <span className={classes.relative}>
+                              Xóa
+                              <div
+                                className={
+                                  highLightGuide ===
+                                  indexHighLightGuide.deleteInput
+                                    ? "high-light-guide"
+                                    : ""
+                                }
+                              ></div>
+                            </span>
+                          </div>
+                        </div>
+                        <div className={classes.contianerCoupleInput}>
+                          {Array(formik.values.answers.length)
+                            .fill(0)
+                            .map((item, index) => {
+                              return (
                                 <div
-                                  className={`${classes.widthIndex} ${classes.alignCnter}`}
+                                  key={index}
+                                  className={classes.rootItemVocabulary}
                                 >
-                                  <div className={`${classes.rootNumber}`}>
-                                    {index}
-                                  </div>
-                                </div>
-                                <div
-                                  className={`${classes.input} ${classes.widthInput}`}
-                                >
-                                  <div>
-                                    <FastField
-                                      component={TextField}
-                                      placeholder="dien vao day"
-                                      {...formik.getFieldProps(
-                                        `answers[${index}].vocabulary`
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                                <div
-                                  className={`${classes.input} ${classes.widthInput}`}
-                                >
-                                  <div>
-                                    <FastField
-                                      component={TextField}
-                                      placeholder="dien vao day"
-                                      {...formik.getFieldProps(
-                                        `answers[${index}].mean`
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                                <div className={classes.widthRemove}>
                                   <div
-                                    className={classes.removeItem}
-                                    onClick={() => remove(index)}
+                                    className={`${classes.widthIndex} ${classes.alignCnter}`}
                                   >
-                                    x
+                                    <div className={`${classes.rootNumber}`}>
+                                      {index + 1}
+                                    </div>
+                                  </div>
+                                  <div
+                                    className={`${classes.input} ${classes.widthInput}`}
+                                  >
+                                    <div>
+                                      <FastField
+                                        component={TextField}
+                                        placeholder="dien vao day"
+                                        {...formik.getFieldProps(
+                                          `answers[${index}].vocabulary`
+                                        )}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div
+                                    className={`${classes.input} ${classes.widthInput}`}
+                                  >
+                                    <div>
+                                      <FastField
+                                        component={TextField}
+                                        placeholder="dien vao day"
+                                        {...formik.getFieldProps(
+                                          `answers[${index}].mean`
+                                        )}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className={classes.widthRemove}>
+                                    <div
+                                      className={classes.removeItem}
+                                      onClick={() => remove(index)}
+                                    >
+                                      x
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          })}
-                      </div>
-                      <div className={`${classes.btn}`} onClick={nextPractive} style={checkValueAllVocabulary ? {opacity:1} : {opacity:0.5}}>
-                        Bắt đầu luyện tập
+                              );
+                            })}
+                        </div>
                         <div
-                          className={
-                            highLightGuide === indexHighLightGuide.practive
-                              ? "high-light-guide"
-                              : ""
+                          className={classes.rootAdd}
+                          onClick={() =>
+                            push({
+                              userId: decodedHeader.sub,
+                              vocabulary: "",
+                              mean: "",
+                              date: moment().format("YYYY-MM-DD"),
+                            })
                           }
-                        ></div>
+                        >
+                          <div className={`${classes.contentAdd}`}>
+                            <AddIcon sx={{ fontSize: "30px" }} />
+                            <div
+                              className={
+                                highLightGuide === indexHighLightGuide.addInput
+                                  ? "high-light-guide"
+                                  : ""
+                              }
+                            ></div>
+                          </div>
+                        </div>
+                        <div
+                          className={`${classes.btn}`}
+                          onClick={() => nextPractive(formik.values.answers)}
+                          style={
+                            checkValueAllVocabulary
+                              ? { opacity: 1 }
+                              : { opacity: 0.5 }
+                          }
+                        >
+                          Bắt đầu luyện tập
+                          <div
+                            className={
+                              highLightGuide === indexHighLightGuide.practive
+                                ? "high-light-guide"
+                                : ""
+                            }
+                          ></div>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                />
-              </Form>
-            );
-          }}
-        </Formik>
+                    )}
+                  />
+                </Form>
+              );
+            }}
+          </Formik>
+        </div>
       </div>
-    </div>
     </>
   );
 };

@@ -51,8 +51,8 @@ const Header = () => {
           <div className={classes.navItem} onClick={() => onNavigate(path.home)}>home</div>
           <div className={classes.navItem} onClick={() => onNavigate(path.vocabularyCustom)}>tu vung tu chon</div>
           <div className={classes.navItem}>tu vung theo chu de</div>
-          <div className={classes.navItem}>tu vung da hoc</div>
-          <div className={classes.navItem} onClick={() => onNavigate(path.games)}>trò chơi</div>
+          <div className={classes.navItem} onClick={() => onNavigate(path.userVocabulary)}>tu vung da hoc</div>
+          <div className={classes.navItem} onClick={() => onNavigate(path.gameImageVocabulary)}>trò chơi</div>
         </div>
       </div>
     </div>

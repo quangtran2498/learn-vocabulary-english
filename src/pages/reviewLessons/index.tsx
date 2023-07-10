@@ -1,64 +1,77 @@
+import React from "react";
+import { Language, ItemLocalstorage, TypeMean } from "../../contant/enums";
+import moment from "moment";
+import { makeStyles } from "@mui/styles";
+import { FastField, Form, Formik } from "formik";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { makeStyles } from "@mui/styles";
-import { FastField, Form, Formik } from "formik";
-import React from "react";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { TextField } from "../../components/common/form/inputField";
-import { store } from "../../redux";
+import { isEmpty } from "lodash";
+import { VocabularysI } from "../../types/vocabularys";
+import ClosePage from "../../components/closePage";
 import ButtonCommon from "../../components/common/button";
-import { Language, TypeMean } from "../../contant/enums";
 import { useNavigate } from "react-router-dom";
 import { path } from "../../contant/path";
 
 const useStyles = makeStyles((theme) => {
-  return {
-    root: {
-      display: "flex",
-      justifyContent: "flex-end",
-    },
-    rootContent: {
-      width: "75%",
-    },
-    test: {
-      color: theme.custom?.text.pinkSubTitle,
-    },
-    input: {
-      width: "48%",
-    },
-    textTitle: {
-      marginRight: "30px",
-    },
-    rootBtn: {
-      ...theme.custom?.flexBox.centerCenter,
-    },
-    btn: {
-      padding: "10px 50px",
-      background: "red",
-      marginTop: "30px",
-      width: "fit-content",
-      borderRadius: "16px",
-      color: "#fff",
-    },
-    contianerCoupleInput: {
-      padding: "20px",
-    },
-  };
-});
+    return {
+      root:{
+         display:"flex",
+         justifyContent:"flex-end"
+      },
+      rootContent:{
+        width:"75%"
+      },
+      test: {
+        color: theme.custom?.text.pinkSubTitle,
+      },
+      input: {
+        width: "48%",
+      },
+      textTitle: {
+        marginRight: "30px",
+      },
+      rootBtn:{
+        ...theme.custom?.flexBox.centerCenter
+      },
+      btn: {
+        padding: "10px 50px",
+        background: "red",
+        marginTop: "30px",
+        width: "fit-content",
+        borderRadius: "16px",
+        color: "#fff",
+      },
+      contianerCoupleInput: {
+        padding: "20px",
+      },
+    };
+  });
 
-const PractiveInputVocabularys = () => {
-  const dataVocablary = store.getState().learnVocabulery.dataVocabuleryCustom;
 
-  const [changeDirection, setChangeDirection] = React.useState("vn");
-  const [dataVocabularys, setDataVocabularys] = React.useState(dataVocablary);
+const ReviewLessons = () => {
 
+  const vocaburatys = JSON.parse(localStorage.getItem(ItemLocalstorage.vocabularys) || "");
+  const data:VocabularysI[] = !isEmpty(vocaburatys) ? vocaburatys : dataTest
+
+  const findVocabularysYesterday = data.filter((item:VocabularysI) => {
+    return moment(item.date).isSame(moment().subtract(1, 'day'), "day") //! thay 0 thanh 1
+  })
+
+  const checkData = !isEmpty(findVocabularysYesterday) ? findVocabularysYesterday : dataTest
+
+  const [changeDirection, setChangeDirection] = React.useState<Language>(Language.vn);
+  const [dataVocabularys, setDataVocabularys] = React.useState<VocabularysI[]>(checkData);
+  
   const [showAnswer, setShowAnswer] = React.useState<number | null>(null);
   
   const navigate = useNavigate()
   const classes = useStyles();
 
   const genInitialValue = () => {
+
     const inputVocabulary = {
       mean: "",
     };
@@ -71,14 +84,17 @@ const PractiveInputVocabularys = () => {
     return { answers };
   };
 
-  const hanldeShowAnswer = (index: number) => {
-    showAnswer === index ? setShowAnswer(null) : setShowAnswer(index);
+  const hanldeShowAnswer = (index:number) => {
+    showAnswer === index ? setShowAnswer(null) : setShowAnswer(index)
   };
-
   return (
+    <>
+    <div>
+        <ClosePage />
+      </div>
     <div className={classes.root}>
-      <div className={classes.rootContent}>
-      <Formik
+    <div className={classes.rootContent}>
+        <Formik
           initialValues={genInitialValue().answers}
           onSubmit={() => {
             console.log("");
@@ -195,9 +211,15 @@ const PractiveInputVocabularys = () => {
             );
           }}
         </Formik>
-      </div>
     </div>
-  );
+  </div>
+    </>
+  )
 };
 
-export default PractiveInputVocabularys;
+export default ReviewLessons;
+
+const dataTest = [
+  { userId: 328, vocabulary: "name", mean: "ten", date: "2023-07-08" },
+  { userId: 328, vocabulary: "age", mean: "tuoi", date: "2023-07-06" },
+]

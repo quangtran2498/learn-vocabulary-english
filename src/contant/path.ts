@@ -8,5 +8,6 @@ export const path = {
     games:"/games",
     gameImageVocabulary:"/games/image-vocabulary",
     gameGun:"/games/gun",
-
+    userVocabulary:"/user-vocabulary",
+    reviewLessons:"/review-lessons"
 }

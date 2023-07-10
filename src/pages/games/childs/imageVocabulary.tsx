@@ -6,7 +6,7 @@ import { useOutletContext } from "react-router-dom";
 import { PropsOutLetI } from "../../vocabularyCustom";
 import { colors } from "../../../colors";
 import { sourceImages } from "../../../assets";
-import PopupService from "../../../utils/PopupService";
+import PopupService from "../../../utils/popupService";
 interface PropsOutlet extends PropsOutLetI {
   changeLanguage:string
 }
@@ -104,16 +104,14 @@ const ImageVocabulary = () => {
     <div style={{ height: "calc(100% - 70px)" }}>
       <Formik initialValues={initialValue} onSubmit={(value) => {}}>
         {(formik) => {
-         console.log(formik.values);
          
          const checkAllValue =  data.every((item,index) => {
            return item[compare] === formik.values[index].mean
           })
           
-          checkAllValue && PopupService.instance.current.open({visible:true})
-          console.log(checkAllValue,"checkAllValue");
+          checkAllValue && console.log("quang test");
           
-
+          
           return (
             <div className={classes.root}>
               <div className={classes.rootImage}>
@@ -161,15 +159,16 @@ export default ImageVocabulary;
 
 const data = [
   { id: 1, vocabulary: "me", mean: "toi" },
-  { id: 2, vocabulary: "me", mean: "toi" },
-  { id: 3, vocabulary: "me", mean: "toi" },
-  { id: 4, vocabulary: "me", mean: "toi" },
-  { id: 5, vocabulary: "me", mean: "toi" },
-  { id: 6, vocabulary: "me", mean: "toi" },
-  { id: 7, vocabulary: "me", mean: "toi" },
-  { id: 8, vocabulary: "me", mean: "toi" },
-  { id: 9, vocabulary: "me", mean: "toi" },
+  { id: 2, vocabulary: "name", mean: "ten" },
+  { id: 3, vocabulary: "age", mean: "tuoi" },
+  { id: 4, vocabulary: "too", mean: "cung" },
+  { id: 5, vocabulary: "good", mean: "tot" },
+  { id: 6, vocabulary: "food", mean: "thuc an" },
+  { id: 7, vocabulary: "eat", mean: "an" },
+  { id: 8, vocabulary: "class", mean: "lop" },
+  { id: 9, vocabulary: "like", mean: "thich" },
 ];
+
 const dataImage = [
   {id:1,url:sourceImages.games.alasca},
   {id:2,url:sourceImages.games.disney},
