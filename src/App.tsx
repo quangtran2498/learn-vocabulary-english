@@ -30,6 +30,7 @@ function App() {
     //     PopupService.instance.current.close()
     //   }
     // });
+
   }, []);
 
   return (

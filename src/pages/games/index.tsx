@@ -7,8 +7,13 @@ import { path } from '../../contant/path';
 import { store } from "../../redux";
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import LanguageIcon from '@mui/icons-material/Language';
 import { colors } from "../../colors";
 import ClosePage from "../../components/closePage";
+import { ItemLocalstorage } from "../../contant/enums";
+import { VocabularysI } from "../../types/vocabularys";
+import { isEmpty } from "lodash";
+import { dataTest } from "../../mock";
 
 export interface PropsOutLetI {
   highLightGuide: number;
@@ -102,24 +107,24 @@ const useStyles = makeStyles((theme) => {
 });
 
 const Games = () => {
+
+  const vocaburatys = JSON.parse(
+    localStorage.getItem(ItemLocalstorage.vocabularys) || ""
+  );
+  const dataLocal: VocabularysI[] = !isEmpty(vocaburatys) ? vocaburatys : dataTest;
+  const newArrVocabulary = [...dataLocal].sort( () => Math.random() - 0.5 );
+
   const [highLightGuide, setHighLightGuide] = React.useState(0);
   const [highLightGame, setHighLightGame] = React.useState(1);
   const [changeLanguagePractive, setChangeLanguagePractive] = React.useState("vn");
-
-  const [pathUrl, setPathUrl] = React.useState<string>(
-    window.location.pathname
-  );
+  const [dataVocabularys, setDataVocabularys] = React.useState(newArrVocabulary.splice(0,9));
+  console.log(dataVocabularys,"dataVocabularys");
   
   const navigate = useNavigate()
-  const heightHeader = store.getState().getHeightHeader.heightHeader
   const classes = useStyles();
 
   const getHighLightGuide = (index: number) => {
     setHighLightGuide(index);
-  };
-
-  const getPathUrl = (path: string) => {
-    setPathUrl(path);
   };
 
  const onPlayGame = (path:string,id:number) => {
@@ -130,7 +135,10 @@ const Games = () => {
  const onGetChangeLanguagePractive = () => {
   changeLanguagePractive==="vn" ? setChangeLanguagePractive("en") : setChangeLanguagePractive("vn")
  }
-
+ const randomData = () => {
+  const newArrVocabulary = [...dataLocal].sort( () => Math.random() - 0.5 );
+   setDataVocabularys(newArrVocabulary.splice(0,9))
+ }
   return (
     <div>
       <div className={classes.navGuide}>
@@ -140,8 +148,12 @@ const Games = () => {
       </div>
       <div className={classes.navChange}>
          <div className={`${classes.changeItem}`}>
-            <AutorenewIcon sx={{color:colors.white}}/>
+            <LanguageIcon sx={{color:colors.white}}/>
             <div className={classes.childChangeItem} onClick={onGetChangeLanguagePractive}>Đảo ngôn ngữ</div>
+         </div>
+         <div className={`${classes.changeItem}`}>
+            <AutorenewIcon sx={{color:colors.white}}/>
+            <div className={classes.childChangeItem} onClick={randomData}>Đổi từ</div>
          </div>
          <div className={`${classes.changeItem}`}>
            <ShuffleIcon sx={{color:colors.white}}/>
@@ -164,8 +176,8 @@ const Games = () => {
             context={{
               highLightGuide: highLightGuide,
               getHighLightGuide: getHighLightGuide,
-              getPathUrl: getPathUrl,
               changeLanguage:changeLanguagePractive,
+              dataVocabularys:dataVocabularys
             }}
           />
         </div>

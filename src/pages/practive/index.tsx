@@ -86,9 +86,7 @@ const PractiveInputVocabularys = () => {
         >
           {(formik) => {
             const hanldeChangeDirection = () => {
-              const newArrVocabulary = [...dataVocabularys].sort(
-                () => Math.random() - 0.5
-              );
+              const newArrVocabulary = [...dataVocabularys].sort( () => Math.random() - 0.5 );
               setDataVocabularys(newArrVocabulary);
               changeDirection === Language.vn ? setChangeDirection(Language.en) : setChangeDirection(Language.vn);
               formik.handleReset();

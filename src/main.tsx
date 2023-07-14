@@ -19,6 +19,7 @@ import SignUp from "./pages/signUp/index.tsx";
 import UserVocabulary from "./pages/userVocabulary/index.tsx";
 import VocabularyCustom from "./pages/vocabularyCustom/index.tsx";
 import { theme } from "./theme/index.ts";
+import PopupGlobal from "./components/popupGlobal/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -88,10 +89,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(  
   <React.StrictMode>
-    <div className="">
       <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
+        {/* <PopupGlobal/> */}
       </ThemeProvider>
-    </div>
   </React.StrictMode>
 );

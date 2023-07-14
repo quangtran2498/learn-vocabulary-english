@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => {
       border: "none",
       borderRadius: "4px",
       textTransform: "capitalize",
+      cursor:"pointer"
     },
     halfWidth: {
       width: "48%",

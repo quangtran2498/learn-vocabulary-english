@@ -7,8 +7,12 @@ import { PropsOutLetI } from "../../vocabularyCustom";
 import { colors } from "../../../colors";
 import { sourceImages } from "../../../assets";
 import PopupService from "../../../utils/popupService";
+import { ItemLocalstorage } from "../../../contant/enums";
+import { VocabularysI } from "../../../types/vocabularys";
+import { isEmpty } from "lodash";
 interface PropsOutlet extends PropsOutLetI {
   changeLanguage:string
+  dataVocabularys:VocabularysI[]
 }
 
 const useStyles = makeStyles((theme) => {
@@ -45,7 +49,8 @@ const useStyles = makeStyles((theme) => {
       opacity: 0.9,
       fontSize: "24px",
       fontWeight: 600,
-      cursor:"pointer"
+      cursor:"pointer",
+      textAlign:"center"
     },
     rootInput: {
       display: "flex",
@@ -71,11 +76,14 @@ const useStyles = makeStyles((theme) => {
   };
 });
 const ImageVocabulary = () => {
+  
+  const propsOutlet:PropsOutlet = useOutletContext()
+  const {changeLanguage,dataVocabularys} = propsOutlet   
 
   const ramdomImageNumber = Math.floor(Math.random() * dataImage.length)
-  const [indexQuestions, setIndexQuestions] = React.useState<number | null>( null );
+  const [indexQuestions, setIndexQuestions] = React.useState<number | null>(null);
   const [randomNumber, setRandomNumber] = React.useState(ramdomImageNumber)
-    
+  
   const classes = useStyles();
   const initialValue = [
     { mean: "" },
@@ -88,8 +96,6 @@ const ImageVocabulary = () => {
     { mean: "" },
     { mean: "" },
   ];
-  const propsOutlet:PropsOutlet = useOutletContext()
-  const {changeLanguage} = propsOutlet   
   
   const lang = changeLanguage === "vn" ? "vocabulary" : "mean"
   const compare = lang === "vocabulary" ? "mean" : "vocabulary"
@@ -105,12 +111,11 @@ const ImageVocabulary = () => {
       <Formik initialValues={initialValue} onSubmit={(value) => {}}>
         {(formik) => {
          
-         const checkAllValue =  data.every((item,index) => {
+         const checkAllValue =  dataVocabularys.every((item,index) => {
            return item[compare] === formik.values[index].mean
           })
           
-          checkAllValue && console.log("quang test");
-          
+          checkAllValue && console.log("quang test");  
           
           return (
             <div className={classes.root}>
@@ -118,17 +123,16 @@ const ImageVocabulary = () => {
                 <img style={{ width: "100%" }} src={dataImage[randomNumber].url} alt="" />
                 <div className={classes.rootVocabularys}>
                   <div className={classes.containerVocabularys}>
-                  {data.map((vocabulary, index) => {
-
+                  {dataVocabularys.map((vocabulary, index) => {
                     return (
                       <div
-                        key={vocabulary.id}
+                        key={vocabulary.userId}
                         className={`${classes.vocabularyItem} 
-                        ${ data[index][compare] === formik.values[index].mean ? classes.hideItem : ""} 
-                        ${ indexQuestions === index ? classes.highLightItem : "" }`}
+                        ${dataVocabularys[index][compare] === formik.values[index].mean ? classes.hideItem : ""} 
+                        ${indexQuestions === index ? classes.highLightItem : "" }`}
                         onClick={() => onGetIndexQuestions(index)}
                       >
-                        {data[index][compare] === formik.values[index].mean ? "" : vocabulary[lang]}
+                        {dataVocabularys[index][compare] === formik.values[index].mean ? "" : vocabulary[lang]}
                       </div>
                     );
                   })}
@@ -156,18 +160,6 @@ const ImageVocabulary = () => {
 };
 
 export default ImageVocabulary;
-
-const data = [
-  { id: 1, vocabulary: "me", mean: "toi" },
-  { id: 2, vocabulary: "name", mean: "ten" },
-  { id: 3, vocabulary: "age", mean: "tuoi" },
-  { id: 4, vocabulary: "too", mean: "cung" },
-  { id: 5, vocabulary: "good", mean: "tot" },
-  { id: 6, vocabulary: "food", mean: "thuc an" },
-  { id: 7, vocabulary: "eat", mean: "an" },
-  { id: 8, vocabulary: "class", mean: "lop" },
-  { id: 9, vocabulary: "like", mean: "thich" },
-];
 
 const dataImage = [
   {id:1,url:sourceImages.games.alasca},

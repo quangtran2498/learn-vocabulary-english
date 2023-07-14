@@ -25,6 +25,7 @@ interface Props extends FastFieldProps {
   styleLabel?: CSSProperties;
   border?:string
   onFocus?: () => void;
+  onClick?: () => void
 }
 
 const CssTextField = withStyles({
@@ -126,6 +127,8 @@ export const TextField = (props: Props) => {
       <CssTextField
         autoComplete="off"
         variant="outlined"
+        onClick={() => console.log("test")
+        }
         name={name}
         type={type}
         onKeyDown={onKeyDown}

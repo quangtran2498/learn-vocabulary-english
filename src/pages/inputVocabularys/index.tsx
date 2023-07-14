@@ -198,14 +198,15 @@ const InputVocabulary = () => {
                   const getVocabularysLocal = localStorage.getItem(
                     ItemLocalstorage.vocabularys
                   );
-                  const convertstringToArr = JSON.parse(
+                  const convertstringToArr = !isEmpty(getVocabularysLocal) && JSON.parse(
                     getVocabularysLocal || ""
                   );
 
-                  const saveDataToLocal = () => {
+                  const saveDataToLocal = () => {                    
                     if (!isEmpty(convertstringToArr)) {
-                      return JSON.stringify([...body, ...convertstringToArr]);
+                      return JSON.stringify([ ...convertstringToArr,...body]);
                     } else {
+
                       return JSON.stringify(body);
                     }
                   };
