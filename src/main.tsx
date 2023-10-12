@@ -20,6 +20,7 @@ import UserVocabulary from "./pages/userVocabulary/index.tsx";
 import VocabularyCustom from "./pages/vocabularyCustom/index.tsx";
 import { theme } from "./theme/index.ts";
 import PopupGlobal from "./components/popupGlobal/index.tsx";
+import Lego from "./pages/games/childs/lego.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,46 @@ const router = createBrowserRouter([
         path: "user-vocabulary",
         element: <UserVocabulary />,
       },
+      {
+        path: "review-lessons",
+        element: <ReviewLessons />,
+      },
+      {
+        path: "vocabulary-custom",
+        element: <VocabularyCustom />,
+        children: [
+          {
+            path: "input-vocabulary",
+            element: <InputVocabulary />,
+          },
+          {
+            path: "practive",
+            element: <PractiveInputVocabularys />,
+          },
+        ],
+      },
+      {
+        path: "games",
+        element: <Games />,
+        children: [
+          {
+            path: "demo",
+            element: <DemoGames />,
+          },
+          {
+            path: "image-vocabulary",
+            element: <ImageVocabulary />,
+          },
+          {
+            path: "gun",
+            element: <GameGun />,
+          },
+          {
+            path: "lego",
+            element: <Lego />,
+          },
+        ],
+      },
     ],
   },
   {
@@ -49,49 +90,13 @@ const router = createBrowserRouter([
     path: "sign-up",
     element: <SignUp />,
   },
-  {
-    path: "review-lessons",
-    element: <ReviewLessons />,
-  },
-  {
-    path: "vocabulary-custom",
-    element: <VocabularyCustom />,
-    children: [
-      {
-        path: "input-vocabulary",
-        element: <InputVocabulary />,
-      },
-      {
-        path: "practive",
-        element: <PractiveInputVocabularys />,
-      },
-    ],
-  },
-  {
-    path: "games",
-    element: <Games />,
-    children: [
-      {
-        path: "demo",
-        element: <DemoGames />,
-      },
-      {
-        path: "image-vocabulary",
-        element: <ImageVocabulary />,
-      },
-      {
-        path: "gun",
-        element: <GameGun />,
-      },
-    ],
-  },
+ 
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(  
   <React.StrictMode>
       <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
-        {/* <PopupGlobal/> */}
       </ThemeProvider>
   </React.StrictMode>
 );

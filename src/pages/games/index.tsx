@@ -118,7 +118,6 @@ const Games = () => {
   const [highLightGame, setHighLightGame] = React.useState(1);
   const [changeLanguagePractive, setChangeLanguagePractive] = React.useState("vn");
   const [dataVocabularys, setDataVocabularys] = React.useState(newArrVocabulary.splice(0,9));
-  console.log(dataVocabularys,"dataVocabularys");
   
   const navigate = useNavigate()
   const classes = useStyles();

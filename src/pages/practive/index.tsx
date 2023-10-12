@@ -5,12 +5,14 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { makeStyles } from "@mui/styles";
 import { FastField, Form, Formik } from "formik";
 import React from "react";
-import { TextField } from "../../components/common/form/inputField";
-import { store } from "../../redux";
-import ButtonCommon from "../../components/common/button";
-import { Language, TypeMean } from "../../contant/enums";
 import { useNavigate } from "react-router-dom";
-import { path } from "../../contant/path";
+import { audio } from "../../assets";
+import ButtonCommon from "../../components/common/button";
+import { TextField } from "../../components/common/form/inputField";
+import CompletePractive from "../../components/completePractive";
+import { Language, TypeMean } from "../../contant/enums";
+import { store } from "../../redux";
+import BtnLearnAgian from "../../components/btnLearnSelect";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -52,10 +54,15 @@ const PractiveInputVocabularys = () => {
 
   const [changeDirection, setChangeDirection] = React.useState("vn");
   const [dataVocabularys, setDataVocabularys] = React.useState(dataVocablary);
-
   const [showAnswer, setShowAnswer] = React.useState<number | null>(null);
-  
-  const navigate = useNavigate()
+  const [focusInput, setFocusInput] = React.useState<number>(0);
+  const audioElement: any = React.useRef<any>(null);
+  const [didComplete, setDidComplete] = React.useState<number[]>([]);
+  const [isShowCompletePractive, setIsShowCompletePractive] = React.useState<boolean>(false);
+  const audioCelebrationElement = React.useRef<HTMLAudioElement | null>(null);
+  const [vocabularysLearnAgian, setVocabularyLearnAgian] = React.useState<{ mean: string; vocabulary: string }[]>([]);
+
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const genInitialValue = () => {
@@ -75,44 +82,71 @@ const PractiveInputVocabularys = () => {
     showAnswer === index ? setShowAnswer(null) : setShowAnswer(index);
   };
 
+  const showCompletePractive = () => {
+    setIsShowCompletePractive(true);
+    audioCelebrationElement.current && audioCelebrationElement.current.play();
+  };
+
+  const onVocabularyLearnAgian = (vocabulary: { mean: string; vocabulary: string }) => {
+    setVocabularyLearnAgian([...vocabularysLearnAgian, vocabulary]);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.rootContent}>
-      <Formik
+        <Formik
           initialValues={genInitialValue().answers}
+          enableReinitialize
           onSubmit={() => {
             console.log("");
           }}
         >
           {(formik) => {
             const hanldeChangeDirection = () => {
-              const newArrVocabulary = [...dataVocabularys].sort( () => Math.random() - 0.5 );
+              const newArrVocabulary = [...dataVocabularys].sort(() => Math.random() - 0.5);
               setDataVocabularys(newArrVocabulary);
               changeDirection === Language.vn ? setChangeDirection(Language.en) : setChangeDirection(Language.vn);
               formik.handleReset();
+              setDidComplete([]);
             };
-            
-            const backHome = () => {
-               navigate(path.home)
-            }
 
             const lang = changeDirection === Language.vn ? TypeMean.vocabulary : TypeMean.mean;
             const compare = lang === TypeMean.vocabulary ? TypeMean.mean : TypeMean.vocabulary;
 
             const checkValue = (index: number) => {
-              return (
-                dataVocabularys[index][compare] === formik.values[index]?.mean
-              );
+              return dataVocabularys[index][compare] === formik.values[index]?.mean;
             };
 
             const checkAllValue = dataVocabularys.every((item, index) => {
               return item[compare] === formik.values[index].mean;
             });
 
+            if (didComplete.includes(focusInput)) {
+            } else {
+              if (dataVocabularys[focusInput][compare] === formik.values[focusInput].mean) {
+                audioElement.current.play();
+                setDidComplete([...didComplete, focusInput]);
+              }
+            }
+
+            const showLearnAgian = () => {
+              setDataVocabularys(vocabularysLearnAgian);
+              setVocabularyLearnAgian([]);
+              formik.handleReset();
+            };
+
             return (
               <Form>
                 <div className="" style={{ padding: "20px" }}>
-                  <div>
+                  <BtnLearnAgian amount={vocabularysLearnAgian.length} showLearnAgian={showLearnAgian} />
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      flexWrap: "wrap",
+                    }}
+                  >
                     {Array(dataVocabularys.length)
                       .fill(0)
                       .map((item, index) => {
@@ -120,26 +154,25 @@ const PractiveInputVocabularys = () => {
                           <div
                             key={index}
                             className=""
-                            style={{ display: "flex", alignItems: "center" }}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              width: "50%",
+                            }}
                           >
                             <div className="" style={{ marginRight: "30px" }}>
                               {dataVocabularys[index][lang]}
                             </div>
-                            <div
-                              style={{ display: "flex", alignItems: "center" }}
-                            >
+                            <div style={{ display: "flex", alignItems: "center" }}>
                               <FastField
                                 component={TextField}
                                 placeholder=""
                                 label=""
                                 {...formik.getFieldProps(`[${index}].mean`)}
+                                onClick={() => setFocusInput(index)}
                               />
                               <div className="" style={{ marginLeft: "20px" }}>
-                                {checkValue(index) ? (
-                                  <CheckIcon sx={{ color: "green" }} />
-                                ) : (
-                                  <CloseIcon sx={{ color: "red" }} />
-                                )}
+                                {checkValue(index) ? <CheckIcon sx={{ color: "green" }} /> : <CloseIcon sx={{ color: "red" }} />}
                                 <div
                                   className=""
                                   style={{
@@ -149,20 +182,24 @@ const PractiveInputVocabularys = () => {
                                 >
                                   <div
                                     className=""
-                                    style={{ marginRight: "5px" }}
+                                    style={{ marginRight: "5px", cursor: "pointer" }}
                                     onClick={() => hanldeShowAnswer(index)}
                                   >
-                                    {showAnswer === index ? (
-                                      <VisibilityOffIcon />
-                                    ) : (
-                                      <VisibilityIcon />
-                                    )}
+                                    {showAnswer === index ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                   </div>
-                                  {showAnswer === index && (
-                                    <div className="">
-                                      {dataVocabularys[index][compare]}
-                                    </div>
-                                  )}
+                                  {showAnswer === index && <div className="">{dataVocabularys[index][compare]}</div>}
+                                </div>
+                                <div
+                                  className=""
+                                  onClick={() => {
+                                    onVocabularyLearnAgian({
+                                      mean: dataVocabularys[index].mean,
+                                      vocabulary: dataVocabularys[index].vocabulary,
+                                    });
+                                  }}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  học lại
                                 </div>
                               </div>
                             </div>
@@ -181,11 +218,7 @@ const PractiveInputVocabularys = () => {
                   >
                     Đổi chiều
                   </ButtonCommon>
-                  <ButtonCommon
-                    className={classes.btn}
-                    onEvent={backHome}
-                    disable={checkAllValue ? false : true}
-                  >
+                  <ButtonCommon className={classes.btn} onEvent={showCompletePractive} disable={checkAllValue ? false : true}>
                     Hoàn thành
                   </ButtonCommon>
                 </div>
@@ -194,6 +227,9 @@ const PractiveInputVocabularys = () => {
           }}
         </Formik>
       </div>
+      <CompletePractive open={isShowCompletePractive} />
+      <audio src={audio.success} hidden ref={audioElement}></audio>
+      <audio src={audio.celebration} hidden ref={audioCelebrationElement}></audio>
     </div>
   );
 };

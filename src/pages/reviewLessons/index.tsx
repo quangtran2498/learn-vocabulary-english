@@ -1,23 +1,15 @@
-import React, { useEffect } from "react";
-import { Language, ItemLocalstorage, TypeMean } from "../../contant/enums";
-import moment from "moment";
 import { makeStyles } from "@mui/styles";
-import { FastField, Form, Formik } from "formik";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { TextField } from "../../components/common/form/inputField";
 import { isEmpty } from "lodash";
-import { VocabularysI } from "../../types/vocabularys";
+import moment from "moment";
+import React from "react";
+import { audio } from "../../assets";
 import ClosePage from "../../components/closePage";
-import ButtonCommon from "../../components/common/button";
-import { useNavigate } from "react-router-dom";
-import { path } from "../../contant/path";
-import CompletePractive from "../../components/completePractive";
-import audio from "../../assets/audio/audio-complete.wav";
+// import CompletePractive from "../../components/completePractive";
+import { ItemLocalstorage } from "../../contant/enums";
+import { VocabularysI } from "../../types/vocabularys";
+import FormQuestion from "../components/form";
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(() => {
   return {
     root: {
       display: "flex",
@@ -26,56 +18,47 @@ const useStyles = makeStyles((theme) => {
     rootContent: {
       width: "75%",
     },
-    test: {
-      color: theme.custom?.text.pinkSubTitle,
+    catalog: {
+      padding: "8px 16px",
+      borderRadius: "20px",
+      cursor: "pointer",
+      marginRight: "8px",
+      border: "1px solid #ccc",
     },
-    input: {
-      width: "48%",
-    },
-    textTitle: {
-      marginRight: "30px",
-    },
-    rootBtn: {
-      ...theme.custom?.flexBox.centerCenter,
-    },
-    btn: {
-      padding: "10px 50px",
-      background: "red",
-      marginTop: "30px",
-      width: "fit-content",
-      borderRadius: "16px",
-      color: "#fff",
-    },
-    contianerCoupleInput: {
-      padding: "20px",
+    itemSelectRange: {
+      padding: "4px 10px",
+      border: "1px solid #ccc",
+      borderRadius: "4px",
+      cursor: "pointer",
     },
   };
 });
 
 const ReviewLessons = () => {
-
-  const [isShowCompletePractive, setIsShowCompletePractive] = React.useState<boolean>(false);
-  const [focusInput, setFocusInput] = React.useState<number>();
-  const audioElement:any = React.useRef<any>(null)
-  
-  const vocaburatys = JSON.parse(
-    localStorage.getItem(ItemLocalstorage.vocabularys) || ""
-  );
-
-  const data: VocabularysI[] = !isEmpty(vocaburatys) ? vocaburatys : dataTest;
-
+  const vocaburatysLocal = JSON.parse(localStorage.getItem(ItemLocalstorage.vocabularys) || "");
+  const data: VocabularysI[] = !isEmpty(vocaburatysLocal) ? vocaburatysLocal : dataTest;
   const findVocabularysYesterday = data.filter((item: VocabularysI) => {
     return moment(item.date).isSame(moment().subtract(1, "day"), "day"); //! thay 0 thanh 1
   });
 
-  const checkData = !isEmpty(findVocabularysYesterday) ? findVocabularysYesterday : dataTest;
+  const checkData = () => {
+    if (!isEmpty(findVocabularysYesterday)) {
+      return findVocabularysYesterday;
+    } else if (!isEmpty(vocaburatysLocal)) {
+      return vocaburatysLocal.splice(0, 10);
+    } else {
+      return dataTest;
+    }
+  };
 
-  const [changeDirection, setChangeDirection] = React.useState<Language>( Language.vn );
-  const [dataVocabularys, setDataVocabularys] = React.useState<VocabularysI[]>(checkData);
+  // const [isShowCompletePractive, setIsShowCompletePractive] = React.useState<boolean>(false);
+  const [catalog, setCatalog] = React.useState<"last" | "part">("last");
+  const [dataVocabularys, setDataVocabularys] = React.useState<VocabularysI[] | { mean: string; vocabulary: string }[]>(checkData());
+  const [numberPart, setNumberPart] = React.useState<number>(0);
 
-  const [showAnswer, setShowAnswer] = React.useState<number | null>(null);
+  // const audioElement = React.useRef<HTMLAudioElement | null>(null);
+  const audioCelebrationElement = React.useRef<HTMLAudioElement | null>(null);
 
-  const navigate = useNavigate();
   const classes = useStyles();
 
   const genInitialValue = () => {
@@ -91,156 +74,87 @@ const ReviewLessons = () => {
     return { answers };
   };
 
-  const hanldeShowAnswer = (index: number) => {
-    showAnswer === index ? setShowAnswer(null) : setShowAnswer(index);
+  // const showCompletePractive = () => {
+  //   setIsShowCompletePractive(true);
+  //   handlePlayAudioCelebration();
+  // };
+
+  // const handlePlayAudio = () => {
+  //   audioElement.current && audioElement.current.play();
+  // };
+  // const handlePlayAudioCelebration = () => {
+  //   audioCelebrationElement.current && audioCelebrationElement.current.play();
+  // };
+
+  const onChangeLearnCatalog = () => {
+    setCatalog("part");
+    setDataVocabularys(vocaburatysLocal.slice(0, 20));
   };
 
-  const showCompletePractive = () => {
-    setIsShowCompletePractive(true);
+  const onNumberPart = (index: number) => {
+    setNumberPart(index);
+    const numberRange = index * 20;
+    setDataVocabularys(vocaburatysLocal.slice(numberRange, numberRange + 20));
   };
+  const part = Math.ceil(vocaburatysLocal.length / 20);
 
-  const handlePlayAudio = () => {
-    audioElement.current.play()
+  const onUpdateVocabularys = (vocabularys: VocabularysI[] | { mean: string; vocabulary: string }[]) => {
+    setDataVocabularys(vocabularys);
   };
-
-  const getFocusInput = (index:number) => {
-    setFocusInput(index)
-  }
 
   return (
     <>
       <div>
         <ClosePage />
       </div>
-      <div className={classes.root}>
-        <div className={classes.rootContent}>
-          <Formik
-            initialValues={genInitialValue().answers}
-            onSubmit={() => {
-              console.log("");
-            }}
-          >
-            {(formik) => {
-              const hanldeChangeDirection = () => {
-                const newArrVocabulary = [...dataVocabularys].sort( () => Math.random() - 0.5 );
-                setDataVocabularys(newArrVocabulary);
-                changeDirection === Language.vn ? setChangeDirection(Language.en) : setChangeDirection(Language.vn);
-                formik.handleReset();
-              };
-
-              const lang = changeDirection === Language.vn ? TypeMean.vocabulary : TypeMean.mean;
-              const compare = lang === TypeMean.vocabulary ? TypeMean.mean : TypeMean.vocabulary;
-
-              const checkValue = (index: number) => {
-                return (
-                  dataVocabularys[index][compare] === formik.values[index]?.mean
-                );
-              };
-
-              const checkAllValue = dataVocabularys.every((item, index) => {
-                return item[compare] === formik.values[index].mean;
-              });
-
-              const playAudio = React.useCallback(() => {
-                // console.log(focusInput && dataVocabularys[focusInput][compare] === formik.values[focusInput]?.mean,"24234234");
-                
-                focusInput ? dataVocabularys[focusInput][compare] === formik.values[focusInput]?.mean && handlePlayAudio() : null
-              },[formik.values[focusInput && focusInput || 0].mean])
-
-              playAudio()
-                      
-              return (
-                <Form>
-                  <div className="" style={{ padding: "20px" }}>
-                    <div style={{ display: "flex", flexWrap: "wrap" }}>
-                      {Array(dataVocabularys.length)
-                        .fill(0)
-                        .map((item, index) => {
-                          return (
-                            <div
-                              key={index}
-                              className=""
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                width: "48%",
-                              }}
-                              // onClick={() => getFocusInput(index)}
-                            >
-                              <div className="" style={{ marginRight: "30px" }}>
-                                {dataVocabularys[index][lang]}
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <FastField
-                                  component={TextField}
-                                  placeholder=""
-                                  label=""
-                                  {...formik.getFieldProps(`[${index}].mean`)}
-                                  onClick={() => getFocusInput(index)}
-                                />
-                                <div
-                                  className=""
-                                  style={{ marginLeft: "20px" }}
-                                >
-                                  {checkValue(index) ? ( <CheckIcon sx={{ color: "green" }} /> ) : ( <CloseIcon sx={{ color: "red" }} /> )}
-                                  <div
-                                    className=""
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    <div
-                                      className=""
-                                      style={{ marginRight: "5px" }}
-                                      onClick={() => hanldeShowAnswer(index)}
-                                    >
-                                      {showAnswer === index ? ( <VisibilityOffIcon /> ) : ( <VisibilityIcon /> )}
-                                    </div>
-                                    {showAnswer === index && (
-                                      <div className="">
-                                        {dataVocabularys[index][compare]}
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-
-                  <div className={classes.rootBtn}>
-                    <ButtonCommon
-                      className={classes.btn}
-                      onEvent={hanldeChangeDirection}
-                      style={{ marginRight: "10px" }}
-                      disable={checkAllValue ? false : true}
-                    >
-                      Đổi chiều
-                    </ButtonCommon>
-                    <ButtonCommon
-                      className={classes.btn}
-                      onEvent={showCompletePractive}
-                      disable={checkAllValue ? false : true}
-                    >
-                      Hoàn thành
-                    </ButtonCommon>
-                  </div>
-                </Form>
-              );
-            }}
-          </Formik>
+      <div className="" style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
+        <div
+          className={classes.catalog}
+          style={catalog === "last" ? { background: "green", color: "#fff" } : {}}
+          onClick={() => {
+            setCatalog("last");
+            setDataVocabularys(findVocabularysYesterday);
+          }}
+        >
+          Hôm qua
+        </div>
+        <div
+          className={classes.catalog}
+          onClick={onChangeLearnCatalog}
+          style={catalog === "part" ? { background: "green", color: "#fff" } : {}}
+        >
+          Học theo phần
         </div>
       </div>
-      <CompletePractive open={isShowCompletePractive} />
-      <audio src={audio} controls ref={audioElement}></audio>
+      {catalog === "part" && (
+        <div className="" style={{ display: "flex", justifyContent: "center", marginBottom: "24px", gap: "8px", flexWrap: "wrap" }}>
+          {Array(part)
+            .fill(0)
+            .map((item, index) => {
+              return (
+                <div
+                  className={classes.itemSelectRange}
+                  style={numberPart === index ? { background: "green", color: "#fff" } : {}}
+                  onClick={() => onNumberPart(index)}
+                >
+                  {index}
+                </div>
+              );
+            })}
+        </div>
+      )}
+      <div className={classes.root}>
+        <div className={classes.rootContent}>
+          <FormQuestion
+            initialValue={genInitialValue().answers}
+            onUpdateVocabularys={onUpdateVocabularys}
+            dataVocabularys={dataVocabularys}
+          />
+        </div>
+      </div>
+      {/* <CompletePractive open={isShowCompletePractive} /> */}
+      {/* <audio src={audio.success} hidden ref={audioElement}></audio> */}
+      <audio src={audio.celebration} hidden ref={audioCelebrationElement}></audio>
     </>
   );
 };

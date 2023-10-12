@@ -49,7 +49,7 @@ const Header = () => {
         <div className={classes.navLeft} onClick={() => onNavigate(path.home)}>Daily english</div>
         <div className={classes.navRight}>
           <div className={classes.navItem} onClick={() => onNavigate(path.home)}>home</div>
-          <div className={classes.navItem} onClick={() => onNavigate(path.vocabularyCustom)}>từ vựng tự chọn</div>
+          <div className={classes.navItem} onClick={() => onNavigate(path.vocabularyCustom)}>học từ mới</div>
           <div className={classes.navItem} onClick={() => onNavigate(path.reviewLessons)}>ôn tập</div>
           <div className={classes.navItem} onClick={() => onNavigate(path.userVocabulary)}>từ vựng đã học</div>
           <div className={classes.navItem} onClick={() => onNavigate(path.gameImageVocabulary)}>trò chơi</div>

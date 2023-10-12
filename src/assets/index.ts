@@ -6,7 +6,9 @@ import doremon from './image/game/doremon.jpg'
 import moon from './image/game/moon.jpg'
 import minecraft from './image/game/minecraft.jpg'
 import icon from './image/icons/icon-fail.png'
-
+import success from './audio/audio-complete.wav'
+import kiss from './audio/kiss.wav'
+import celebration from './audio/celebration.wav'
 
 export const sourceImages = {
     games:{
@@ -21,4 +23,9 @@ export const sourceImages = {
     icons:{
         icon:icon
     }
+}
+export const audio = {
+    success:success,
+    kiss:kiss,
+    celebration:celebration
 }

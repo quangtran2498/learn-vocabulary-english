@@ -9,5 +9,6 @@ export const path = {
     gameImageVocabulary:"/games/image-vocabulary",
     gameGun:"/games/gun",
     userVocabulary:"/user-vocabulary",
-    reviewLessons:"/review-lessons"
+    reviewLessons:"/review-lessons",
+    gameLego:"/games/lego"
 }

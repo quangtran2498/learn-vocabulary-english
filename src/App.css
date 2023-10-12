@@ -29,3 +29,7 @@
     transform: rotate(45deg);
   }
 }
+
+.target {
+  background: none !important;
+}

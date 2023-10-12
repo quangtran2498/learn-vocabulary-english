@@ -178,12 +178,9 @@ const InputVocabulary = () => {
           <Formik
             initialValues={genInitialValue()}
             onSubmit={() => {
-              console.log("");
             }}
           >
             {(formik) => {
-              // console.log(formik.values);
-
               const checkValueAllVocabulary = formik.values.answers.every(
                 (item) => item.vocabulary && item.mean
               );

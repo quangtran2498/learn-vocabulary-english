@@ -5,7 +5,7 @@ import { TextField } from "../../../components/common/form/inputField";
 import { useOutletContext } from "react-router-dom";
 import { PropsOutLetI } from "../../vocabularyCustom";
 import { colors } from "../../../colors";
-import { sourceImages } from "../../../assets";
+import { audio, sourceImages } from "../../../assets";
 import PopupService from "../../../utils/popupService";
 import { ItemLocalstorage } from "../../../contant/enums";
 import { VocabularysI } from "../../../types/vocabularys";
@@ -83,6 +83,9 @@ const ImageVocabulary = () => {
   const ramdomImageNumber = Math.floor(Math.random() * dataImage.length)
   const [indexQuestions, setIndexQuestions] = React.useState<number | null>(null);
   const [randomNumber, setRandomNumber] = React.useState(ramdomImageNumber)
+  const [focusInput, setFocusInput] = React.useState<number>(0);
+  const audioElement:any = React.useRef<any>(null)
+  const [didComplete, setDidComplete] = React.useState<number[]>([]);
   
   const classes = useStyles();
   const initialValue = [
@@ -104,6 +107,11 @@ const ImageVocabulary = () => {
     setIndexQuestions(index);
     const inputElement:any = document.querySelector(".MuiInputBase-input")
     inputElement.focus()
+    setFocusInput(index)
+  };
+
+  const handlePlayAudio = () => {
+    audioElement.current.play()
   };
 
   return (
@@ -114,8 +122,22 @@ const ImageVocabulary = () => {
          const checkAllValue =  dataVocabularys.every((item,index) => {
            return item[compare] === formik.values[index].mean
           })
+
+          if (didComplete.includes(focusInput)) {
+          } else {
+            if(dataVocabularys[focusInput][compare] === formik.values[focusInput].mean) {
+               handlePlayAudio();
+               setDidComplete([...didComplete, focusInput]);
+            }
+          }
           
-          checkAllValue && console.log("quang test");  
+          checkAllValue &&  PopupService.instance.current.open({
+            visible: true,
+            content:<>fsdfsdf</>,
+            onHidePopup:() => {
+              PopupService.instance.current.close()
+            }
+          });
           
           return (
             <div className={classes.root}>
@@ -155,6 +177,7 @@ const ImageVocabulary = () => {
           );
         }}
       </Formik>
+      <audio src={audio.kiss} hidden ref={audioElement}></audio>
     </div>
   );
 };

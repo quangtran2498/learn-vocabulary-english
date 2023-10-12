@@ -1,9 +1,7 @@
 import React, { CSSProperties } from "react";
 
 import { Box, TextField as TextFieldMui } from "@mui/material";
-import { makeStyles, withStyles } from "@mui/styles";
 import { FastFieldProps } from "formik";
-//
 import { InputAdornment } from "@mui/material";
 import { colors } from "../../../colors";
 import FormLabel from "./formLabel";
@@ -23,78 +21,10 @@ interface Props extends FastFieldProps {
   required?: boolean;
   disabled?: boolean;
   styleLabel?: CSSProperties;
-  border?:string
+  border?: string;
   onFocus?: () => void;
-  onClick?: () => void
+  onClick?: () => void;
 }
-
-const CssTextField = withStyles({
-  root: {
-    "& .MuiInputBase-multiline": {
-      padding: 0,
-    },
-    "& .MuiInputBase-multiline.Mui-disabled": {
-      background: "#EBEBF0",
-    },
-    "& .MuiOutlinedInput-root textarea": {
-      minHeight: "30px !important",
-      paddingLeft: "14px",
-      paddingRight: "14px",
-      paddingTop: "13px",
-      paddingBottom: "13px",
-      overflow: "hidden",
-      "&::placeholder": {
-        color: "#BABABA",
-      },
-    },
-    "& .MuiInputBase-adornedEnd": {
-      border: `1px solid ${colors.input.border.main}`,
-    },
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "4px",
-      marginTop: "4px",
-      paddingRight:"0px",
-      "& input": {
-        background: colors.background.main,
-        borderRadius: "4px",
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: 'nowarp',
-        lineHeight: "48px",
-        width: '100%',
-        border: `1px solid ${colors.input.border.main}`,
-        // minHeight:"56px",
-        "&::placeholder": {
-          color: "#BABABA",
-        },
-      },
-      "& select": {
-        background: colors.background.main,
-        borderRadius: "4px",
-        padding: "0 32px 0 14px",
-        border: `1px solid ${colors.input.border.main}`,
-      },
-      "& textarea": {
-        background: colors.background.main,
-        borderRadius: "4px",
-        border: `1px solid ${colors.input.border.main}`,
-        minHeight:"56px",
-      },
-      "& .Mui-disabled": {
-        background: colors.input.background.disable,
-      },
-      "& .MuiInputBase-inputAdornedEnd": {
-        border: "none",
-        background: "none",
-      },
-
-      "& fieldset": {
-        border: "none",
-        borderRadius: "4px",
-      },
-    },
-  },
-})(TextFieldMui);
 
 export const TextField = (props: Props) => {
   const {
@@ -114,26 +44,22 @@ export const TextField = (props: Props) => {
     required,
     styleLabel,
     border,
+    disabled,
     ...rest
   } = props;
   const { name, value } = field;
   const { errors, touched, handleChange, handleBlur, setFieldTouched } = form;
-  
+
   return (
     <Box py={0.5}>
-      {label && (
-        <FormLabel required={required} name={name} title={label} style={styleLabel}></FormLabel>
-      )}
-      <CssTextField
+      {label && <FormLabel required={required} name={name} title={label} style={styleLabel}></FormLabel>}
+      <TextFieldMui
         autoComplete="off"
         variant="outlined"
-        onClick={() => console.log("test")
-        }
         name={name}
         type={type}
         onKeyDown={onKeyDown}
         fullWidth={fullWidth}
-        className={`${props.className}`}
         onChange={handleChange}
         style={{ ...styleAdd }}
         onFocus={() => {
@@ -144,14 +70,78 @@ export const TextField = (props: Props) => {
         placeholder={placeholder}
         {...rest}
         error={touched[name] && Boolean(errors[name])}
-        helperText={touched[name] && errors[name] && (<>{errors[name]}</>)}
+        helperText={touched[name] && errors[name] && <>{errors[name]}</>}
         InputProps={
           Icons && {
-            endAdornment: (
-              <InputAdornment position="end">{Icons}</InputAdornment>
-            ),
+            endAdornment: <InputAdornment position="end">{Icons}</InputAdornment>,
           }
         }
+        disabled={disabled}
+        sx={{
+          "& .MuiInputBase-multiline": {
+            padding: 0,
+          },
+          "& .MuiInputBase-multiline.Mui-disabled": {
+            background: "#EBEBF0",
+          },
+          "& .MuiOutlinedInput-root textarea": {
+            minHeight: "30px !important",
+            paddingLeft: "14px",
+            paddingRight: "14px",
+            paddingTop: "13px",
+            paddingBottom: "13px",
+            overflow: "hidden",
+            "&::placeholder": {
+              color: "#BABABA",
+            },
+          },
+          "& .MuiInputBase-adornedEnd": {
+            border: `1px solid ${colors.input.border.main}`,
+          },
+          "& .MuiOutlinedInput-root": {
+            borderRadius: "4px",
+            marginTop: "4px",
+            paddingRight: "0px",
+            "& input": {
+              background: colors.background.main,
+              borderRadius: "4px",
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              whiteSpace: "nowarp",
+              lineHeight: "48px",
+              width: "100%",
+              border: `1px solid ${colors.input.border.main}`,
+              ...styleInput,
+              "&::placeholder": {
+                color: "#BABABA",
+              },
+            },
+            "& select": {
+              background: colors.background.main,
+              borderRadius: "4px",
+              padding: "0 32px 0 14px",
+              border: `1px solid ${colors.input.border.main}`,
+            },
+            "& textarea": {
+              background: colors.background.main,
+              borderRadius: "4px",
+              border: `1px solid ${colors.input.border.main}`,
+              minHeight: "56px",
+            },
+            "& .Mui-disabled": {
+              background: colors.input.background.disable,
+            },
+            "& .MuiInputBase-inputAdornedEnd": {
+              border: "none",
+              background: "none",
+            },
+
+            "& fieldset": {
+              border: "none",
+              borderRadius: "4px",
+            },
+          },
+        }}
       />
     </Box>
   );
